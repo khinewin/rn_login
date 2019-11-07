@@ -1,7 +1,7 @@
 import React,{Component} from 'react';
 import { StyleSheet, Text, View,ScrollView } from 'react-native';
 
-import {createAppContainer} from 'react-navigation'
+import {createAppContainer, createSwitchNavigator} from 'react-navigation'
 import {createBottomTabNavigator} from 'react-navigation-tabs'
 import Icon from 'react-native-vector-icons/FontAwesome5'
 import {Container,Header, Thumbnail, Left, Right, Title,Body, Card, Input, Item, Content, Button , Spinner} from 'native-base'
@@ -14,14 +14,13 @@ import Home from './views/Home.js'
 import Setting from './views/Setting.js'
 import { createDrawerNavigator } from 'react-navigation-drawer';
 import Profile from './views/Profile'
-
+import AuthLoading from './views/AuthLoading'
 
 export default class App extends Component {
 
   render(){  
 
-    const DrawerApp=createDrawerNavigator({
-     
+    const DrawerApp=createDrawerNavigator({    
         
         Dashboard :{
           screen: Home,
@@ -66,14 +65,7 @@ export default class App extends Component {
            
           }
         },
-        Home: {
-          screen: DrawerApp,
-          navigationOptions:{
-            tabBarLabel: "Dashboard",
-            tabBarIcon:({tintColor})=><Icon name="tachometer-alt" color={tintColor}></Icon>
-           
-          }
-        }
+        
     },
     {
       initialRouteName: "Login",
@@ -88,7 +80,18 @@ export default class App extends Component {
       },
       
     })
-    const AppContriner=createAppContainer(StackApp)
+
+    const SwitchNav=createSwitchNavigator({
+      AuthLoading: AuthLoading,
+      App: DrawerApp,
+      Auth: StackApp,
+    
+    },{
+      initialRouteName: "AuthLoading"
+    })
+    const AppContriner=createAppContainer(SwitchNav)
+
+   
 
     return(<AppContriner></AppContriner>)
   }
